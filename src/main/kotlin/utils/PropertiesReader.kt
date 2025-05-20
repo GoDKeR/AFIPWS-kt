@@ -15,6 +15,7 @@ object PropertiesReader {
                 properties.apply {
                     setProperty("CERT", "default_cert.crt")
                     setProperty("KEY", "default_key.key")
+                    setProperty("URL", "https://wsaahomo.afip.gov.ar/ws/services/LoginCms")
                 }
 
                 file.outputStream().use { properties.store(it, "Generado automáticamente. Completar") }

@@ -33,10 +33,12 @@ kotlin {
 
 tasks.jar.configure {
     manifest {
-        attributes(mapOf("Main-Class" to "org.godker.Main.kt"))
+        attributes(mapOf("Main-Class" to "org.godker.MainKt"))
     }
     configurations["compileClasspath"].forEach { file: File ->
         from(zipTree(file.absoluteFile))
     }
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    exclude("META-INF/*.RSA", "META-INF/*.DSA", "META-INF/*.SF")
 }
