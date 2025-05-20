@@ -41,6 +41,6 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-.crt
-.key
+*.crt
+*.key
 config.properties
