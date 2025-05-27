@@ -44,3 +44,4 @@ bin/
 *.crt
 *.key
 config.properties
+cache/*.xml

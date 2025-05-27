@@ -20,6 +20,9 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
+    implementation("com.github.ajalt.clikt:clikt:5.0.1")
+    implementation("com.github.ajalt.clikt:clikt-markdown:5.0.1")
+
     testImplementation(kotlin("test"))
 }
 

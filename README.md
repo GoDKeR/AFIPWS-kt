@@ -32,6 +32,7 @@ URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms
 - [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime)
 - [SimpleXML](https://github.com/ngallagher/simplexml)
 - [Bouncy Castle](https://www.bouncycastle.org/)
+- [Clikt](https://ajalt.github.io/clikt/)
 
 ## Documentación del WS
 

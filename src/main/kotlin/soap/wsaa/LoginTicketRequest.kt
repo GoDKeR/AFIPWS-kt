@@ -1,4 +1,4 @@
-package org.godker.soap.requests
+package org.godker.soap.wsaa
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root

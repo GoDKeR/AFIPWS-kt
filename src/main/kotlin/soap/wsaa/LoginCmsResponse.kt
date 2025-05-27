@@ -1,4 +1,4 @@
-package org.godker.soap.responses
+package org.godker.soap.wsaa
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Namespace

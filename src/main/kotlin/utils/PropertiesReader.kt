@@ -15,7 +15,12 @@ object PropertiesReader {
                 properties.apply {
                     setProperty("CERT", "default_cert.crt")
                     setProperty("KEY", "default_key.key")
-                    setProperty("URL", "https://wsaahomo.afip.gov.ar/ws/services/LoginCms")
+                    setProperty("WSAA_URL", "https://wsaa.afip.gov.ar/ws/services/LoginCms")
+                    setProperty("WSAA_URL_HOMOLOGACION", "https://wsaahomo.afip.gov.ar/ws/services/LoginCms")
+                    setProperty("WSFE_URL", "https://servicios1.afip.gov.ar/wsfev1/service.asmx")
+                    setProperty("WSFE_URL_HOMOLOGACION", "https://wswhomo.afip.gov.ar/wsfev1/service.asmx")
+                    setProperty("CUIT", "00000000000")
+                    setProperty("CACHE_DIR", "cache/")
                 }
 
                 file.outputStream().use { properties.store(it, "Generado automáticamente. Completar") }

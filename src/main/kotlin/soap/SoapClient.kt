@@ -5,12 +5,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
-class SoapClient (private val endpoint: String, private val client: OkHttpClient) {
+class SoapClient (private val client: OkHttpClient) {
 
     private val mediaType = "text/xml; charset=utf-8".toMediaType()
 
-    fun sendSoapRequest(xml: String): String {
-        val body = xml.toRequestBody(mediaType)
+    fun sendSoapRequest(endpoint: String, xml: String): String {
+        val body = xml.trim().toRequestBody(mediaType)
 
         val request = Request.Builder()
             .url(endpoint)
