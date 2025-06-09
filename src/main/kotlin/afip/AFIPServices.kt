@@ -1,4 +1,4 @@
-package org.godker.utils
+package org.godker.afip
 
 enum class AFIPServices(val value: String, val description: String) {
     WSFEv1  ("wsfe",    "Factura Electrónica v1"),

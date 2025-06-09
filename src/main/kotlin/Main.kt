@@ -4,25 +4,13 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.main
 import okhttp3.OkHttpClient
+import org.godker.afip.*
 import org.godker.utils.CryptoService
 import org.godker.utils.PropertiesReader
-import org.godker.utils.SimpleXmlSerializer
 import org.godker.soap.SoapClient
 import org.godker.soap.SoapEnvelope
-import org.godker.soap.wsaa.In0Wrapper
-import org.godker.soap.wsaa.LoginCmsRequest
-import org.godker.soap.wsfe.CbteAsocWrapper
-import org.godker.soap.wsfe.ComprobanteAsociado
-import org.godker.soap.wsfe.FEAuth
-import org.godker.soap.wsfe.FECAECabReq
-import org.godker.soap.wsfe.FECAEDetReq
-import org.godker.soap.wsfe.FECAEReq
-import org.godker.soap.wsfe.FECAESolicitar
-import org.godker.soap.wsfe.FeCAEDetItem
-import org.godker.utils.AFIPServices
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.Namespace
-import org.simpleframework.xml.Root
+
+import java.util.concurrent.TimeUnit
 
 /*
     println(PropertiesReader.getProperty("CERT"))
@@ -51,40 +39,93 @@ class Cli() : CliktCommand() {
     override fun run() {
         //TODO("Not yet implemented")
 
-        /*val serializer = SimpleXmlSerializer()
-
-        val sol = FECAESolicitar(
-            FEAuth("tokenwi", "signwi", 88),
-            FECAEReq(
-                FECAECabReq(1,2,3),
-                FECAEDetReq(mutableListOf<FeCAEDetItem>(
-                    FeCAEDetItem(1, 2,38334557, 3, 4, "", 10.00, 11.00, 12.00, 0.00, 0.00, 0.01, "", "", "", "1", 0.00, "", 1,
-                        CbteAsocWrapper(
-                            arrayListOf(
-                                ComprobanteAsociado(1, 2, 3, "", ""),
-                                ComprobanteAsociado(1, 2, 3, "", "")
-                            )
-                        )
-                    )
-                ))
-            ))
-        println(SoapEnvelope.toXml(serializer.toXml(sol)).trimIndent())*/
-
-        val serializer = SimpleXmlSerializer()
-
         val crypto = CryptoService(
             PropertiesReader.getProperty("CERT"),
             PropertiesReader.getProperty("KEY")
         )
 
-        val httpClient = OkHttpClient()
+        val httpClient: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+
         val soapClient = SoapClient(httpClient)
 
-        val wsaa = WSAA(AFIPServices.WSFEv1, crypto, serializer, soapClient)
+        val wsaa = WSAA(AFIPServices.WSFEv1, crypto, soapClient)
 
-        println(wsaa.llamarWSAA())
+        val credentials = wsaa.llamarWSAA()
+
+        val wsfe = WSFEv1(credentials, soapClient)
+
+        val factura = Factura(
+            concepto = 1,
+            docTipo = 80, // CUIT
+            docNro = 20123456789,
+            cbteDesde = 1,
+            cbteHasta = 1,
+            cbteFch = "20250603",
+            impTotal = 121.0,
+            impTotConc = 0.0,
+            impNeto = 100.0,
+            impOpEx = 0.0,
+            impTrib = 0.0,
+            impIVA = 21.0,
+            fchServDesde = null,
+            fchServHasta = null,
+            fchVtoPago = null,
+            monId = "PES",
+            monCotiz = 1.0,
+            canMisMonExt = null,
+            condicionIVAReceptorId = 1,
+            cbtesAsoc = arrayListOf(
+                ComprobanteAsociado(
+                    tipo = 6,
+                    ptoVta = 1,
+                    nro = 12345678,
+                    cuit = "20304050607",
+                    cbteFch = "20250501"
+                )
+            ),
+            tributos = arrayListOf(
+                Tributo(
+                    id = 99,
+                    desc = "Impuesto Interno",
+                    baseImp = 100.0,
+                    alic = 10.0,
+                    importe = 10.0
+                )
+            ),
+            iva = arrayListOf(
+                AlicIva(
+                    id = 5, // 21%
+                    baseImp = 100.0,
+                    importe = 21.0
+                )
+            ),
+            opcionales = arrayListOf(
+                Opcional(
+                    id = 2101,
+                    valor = "ValorOpcional"
+                )
+            ),
+            compradores = arrayListOf(
+                Comprador(
+                    docTipo = 80,
+                    docNro = "20999999999",
+                    porcentaje = 100.0
+                )
+            ),
+            periodoAsoc = Periodo(
+                fchDesde = "20250401",
+                fchHasta = "20250430"
+            ),
+            actividades = arrayListOf(
+                Actividad(id = 123456)
+            )
+        )
+
+        wsfe.feCAESolicitar(factura)
     }
-
 }
 
 fun main(args: Array<String>) = Cli().main(args)

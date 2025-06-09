@@ -1,4 +1,4 @@
-package org.godker.soap.wsfe
+package org.godker.afip
 
 enum class WSFEOperation(val action: String) {
     FECAESolicitar("FECAESolicitar"),

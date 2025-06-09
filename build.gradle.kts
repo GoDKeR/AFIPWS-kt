@@ -16,8 +16,6 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:1.78")
     implementation("org.bouncycastle:bcpkix-jdk18on:1.78")
 
-    implementation("org.simpleframework:simple-xml:2.7.1")
-
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
     implementation("com.github.ajalt.clikt:clikt:5.0.1")
